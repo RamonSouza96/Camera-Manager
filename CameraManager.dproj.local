@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/09/30 09:56:28.000.324,=D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/10/08 11:48:44.000.687,=D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/11/15 22:40:13.000.402,=D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/11/18 15:53:26.000.285,=D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/11/18 15:57:29.000.461,D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.fmx=C:\PROJETOS\FMX\Camera Manager\uMain.fmx</Transaction>
+    <Transaction>2021/11/18 15:57:29.000.461,D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Unit1.pas=C:\PROJETOS\FMX\Camera Manager\uMain.pas</Transaction>
+    <Transaction>2021/11/18 15:57:36.000.415,D:\Users\T-Gamer\Documentos\Embarcadero\Studio\Projects\Project1.dproj=C:\PROJETOS\FMX\Camera Manager\CameraManager.dproj</Transaction>
+    <Transaction>2021/11/18 16:04:01.000.003,=C:\PROJETOS\FMX\Camera Manager\uHelpers.RequestPermissions.pas</Transaction>
+    <Transaction>2021/11/18 17:30:00.000.038,=C:\PROJETOS\FMX\Camera Manager\uHelpers.JavaTypes.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5" Android="" Android64="ZF52352C7D"/>
+	</ActiveMobileDevice>
+</BorlandProject>
