@@ -12,6 +12,6 @@
     <Transaction>2021/11/18 17:30:00.000.038,=C:\PROJETOS\FMX\Camera Manager\uHelpers.JavaTypes.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile iOSSimulator="iPhone5" Android="" Android64="ZF52352C7D"/>
+		<NoProfile iOSSimulator="iPhone5" Android="ZF52352C7D" Android64=""/>
 	</ActiveMobileDevice>
 </BorlandProject>

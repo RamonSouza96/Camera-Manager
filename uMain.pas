@@ -3,10 +3,11 @@
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.SysUtils, System.Types, System.UITypes, System.Classes,
+  System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
   FMX.Media, FMX.TabControl, FMX.Controls.Presentation, FMX.StdCtrls,
-  FMX.Layouts,FMX.ExtCtrls, FMX.Effects,FMX.Ani;
+  FMX.Layouts, FMX.ExtCtrls, FMX.Effects, FMX.Ani;
 
 type
   TFrmMain = class(TForm)
@@ -80,8 +81,8 @@ type
     procedure ImgCaptureClick(Sender: TObject);
     procedure RectCropMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
-    procedure RectCropMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Single);
+    procedure RectCropMouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Single);
     procedure RectCropMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure FormMouseUp(Sender: TObject; Button: TMouseButton;
@@ -90,7 +91,7 @@ type
     procedure ImgZoomOutClick(Sender: TObject);
     procedure BtnRotation1Click(Sender: TObject);
     procedure BtnBackClick(Sender: TObject);
-    Procedure CropImg(Img: TImage;ImgRes: TCircle);
+    Procedure CropImg(Img: TImage; ImgRes: TCircle);
     procedure Circle1Click(Sender: TObject);
     Procedure PermissionStorage;
     procedure BtnFinishClick(Sender: TObject);
@@ -102,78 +103,80 @@ type
 
 var
   FrmMain: TFrmMain;
-    inaction: boolean = false;
+  Inaction: Boolean = False;
+
 implementation
 
 {$R *.fmx}
 
 uses uHelpers.RequestPermissions, uHelpers.JavaTypes;
 
-
-Procedure TFrmMain.CropImg(Img :TImage; ImgRes:TCircle);
-  var
-  lBmp: TBitmap;
+Procedure TFrmMain.CropImg(Img: TImage; ImgRes: TCircle);
+var
+  LBmp: TBitmap;
   xScale, yScale: extended;
-  iRect: TRect;
+  LRect: TRect;
   OffsetX, OffsetY: extended;
 begin
 
-  lBmp := TBitmap.Create;
+  LBmp := TBitmap.Create;
   try
     xScale := Img.Bitmap.Width / Img.Width;
     yScale := Img.Bitmap.Height / Img.Height;
 
-    if xScale > yScale
-    then yscale := xScale
-    else xscale := yScale;
+    if xScale > yScale then
+      yScale := xScale
+    else
+      xScale := yScale;
 
-    lBmp.Width := round(RectCrop.Width * xScale);
-    lBmp.Height := round(RectCrop.Height * yScale);
-    offsetx := (Img.Width - Img.Bitmap.Width / xscale) / 2;
-    offsety := (Img.Height - Img.Bitmap.Height / yscale) / 2;
+    LBmp.Width := round(RectCrop.Width * xScale);
+    LBmp.Height := round(RectCrop.Height * yScale);
+    OffsetX := (Img.Width - Img.Bitmap.Width / xScale) / 2;
+    OffsetY := (Img.Height - Img.Bitmap.Height / yScale) / 2;
 
-    iRect.Left   := round((RectCrop.Position.X - offsetx) * xscale);
-    iRect.Top    := round((RectCrop.Position.Y - offsety) * yscale);
-    iRect.Width  := round(RectCrop.Width * xscale);
-    iRect.Height := round(RectCrop.Height * yscale);
+    LRect.Left := round((RectCrop.Position.X - OffsetX) * xScale);
+    LRect.Top := round((RectCrop.Position.Y - OffsetY) * yScale);
+    LRect.Width := round(RectCrop.Width * xScale);
+    LRect.Height := round(RectCrop.Height * yScale);
 
-    if iRect.Left < 0 then iRect.Left := 0;
-    if iRect.Top  < 0 then iRect.Top  := 0;
-    if iRect.Width < 1 then iRect.Width := 1;
-    if iRect.Height > (LBMp.Height-1) then iRect.Height := LBmp.Height;
+    if LRect.Left < 0 then
+      LRect.Left := 0;
+    if LRect.Top < 0 then
+      LRect.Top := 0;
+    if LRect.Width < 1 then
+      LRect.Width := 1;
+    if LRect.Height > (LBmp.Height - 1) then
+      LRect.Height := LBmp.Height;
 
-    lBmp.CopyFromBitmap(Img.Bitmap, iRect, 0, 0);
+    LBmp.CopyFromBitmap(Img.Bitmap, LRect, 0, 0);
     ImgRes.Fill.Bitmap.Bitmap.Clear(0);
-    ImgRes.Fill.Bitmap.Bitmap:= lBmp;
+    ImgRes.Fill.Bitmap.Bitmap := LBmp;
 
   finally
-    FreeAndNil(lBmp);
+    FreeAndNil(LBmp);
   end;
-
 End;
 
 procedure TFrmMain.BtnFinishClick(Sender: TObject);
 begin
-CropImg(ImgPreview,Circle1);
-ImgPreview.Bitmap.Clear(0);
-TabCon.GotoVisibleTab(0);
+  CropImg(ImgPreview, Circle1);
+  ImgPreview.Bitmap.Clear(0);
+  TabCon.GotoVisibleTab(0);
 end;
 
 Procedure TFrmMain.StartCamera;
-Begin
-TabCon.GotoVisibleTab(1);
-CameraComponent.Active := True;
-CameraComponent.FocusMode := TFocusMode.ContinuousAutoFocus;
-End;
-
+begin
+  TabCon.GotoVisibleTab(1);
+  CameraComponent.Active := True;
+  CameraComponent.FocusMode := TFocusMode.ContinuousAutoFocus;
+end;
 
 Procedure TFrmMain.PermissionStorage;
 Begin
 {$IFDEF ANDROID}
-TRequestPermissions.READ_WRITE_EXTERNAL_STORAGE('',FrmMain,StartCamera);
+  TRequestPermissions.READ_WRITE_EXTERNAL_STORAGE('', FrmMain, StartCamera);
 {$ENDIF}
-End;
-
+end;
 
 procedure TFrmMain.CameraComponentSampleBufferReady(Sender: TObject;
   const ATime: TMediaTime);
@@ -183,7 +186,8 @@ end;
 
 procedure TFrmMain.Circle1Click(Sender: TObject);
 begin
- TRequestPermissions.CAMERA('Unfortunately we cannot carry a camera.',FrmMain,PermissionStorage);
+  TRequestPermissions.CAMERA('Unfortunately we cannot carry a camera.', FrmMain,
+    PermissionStorage);
 end;
 
 procedure TFrmMain.DisplayCameraPreviewFrame;
@@ -194,108 +198,103 @@ end;
 procedure TFrmMain.FormMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
-   inaction:=false;
+  Inaction := False;
 end;
 
 procedure TFrmMain.ImgCaptureClick(Sender: TObject);
 begin
-  CameraComponent.SampleBufferToBitmap(ImgPreview.Bitmap,true);
+  CameraComponent.SampleBufferToBitmap(ImgPreview.Bitmap, True);
   TabCon.GotoVisibleTab(2);
 end;
 
 procedure TFrmMain.ImgZoomINClick(Sender: TObject);
 begin
-  RectCrop.Height:=RectCrop.Height+25;
-  RectCrop.Width:=RectCrop.Width+25;
+  RectCrop.Height := RectCrop.Height + 25;
+  RectCrop.Width := RectCrop.Width + 25;
 end;
 
 procedure TFrmMain.ImgZoomOutClick(Sender: TObject);
 begin
-  RectCrop.Height:=RectCrop.Height-25;
-  RectCrop.Width:=RectCrop.Width-25;
+  RectCrop.Height := RectCrop.Height - 25;
+  RectCrop.Width := RectCrop.Width - 25;
 end;
 
 procedure TFrmMain.RectCropMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
- inaction:=true;
+  Inaction := True;
 end;
 
-procedure TFrmMain.RectCropMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Single);
+procedure TFrmMain.RectCropMouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Single);
 begin
- if inaction then
- begin
-   (Sender as TRectangle).Position.X:=(Sender as TRectangle).Position.X + X -((Sender as TRectangle).Width / 2);
-   (Sender as TRectangle).Position.Y:=(Sender as TRectangle).Position.Y + Y -((Sender as TRectangle).Height / 2);
- end;
+  if Inaction then
+  begin
+    (Sender as TRectangle).Position.X := (Sender as TRectangle).Position.X + X -
+      ((Sender as TRectangle).Width / 2);
+    (Sender as TRectangle).Position.Y := (Sender as TRectangle).Position.Y + Y -
+      ((Sender as TRectangle).Height / 2);
+  end;
 end;
 
 procedure TFrmMain.RectCropMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
- inaction:=false;
+  Inaction := False;
 end;
 
 Procedure TFrmMain.FinishUpload;
-Begin
-TabCon.ActiveTab:=TabPreviewImage;
-End;
+begin
+  TabCon.ActiveTab := TabPreviewImage;
+end;
 
 procedure TFrmMain.BtnBackClick(Sender: TObject);
 begin
-TabCon.GotoVisibleTab(1);
+  TabCon.GotoVisibleTab(1);
 end;
 
 procedure TFrmMain.BtnGetFileClick(Sender: TObject);
 begin
-THelpsJavaTypes.GetImgToIntent(ImgPreview.Bitmap,FinishUpload);
+  THelpsJavaTypes.GetImgToIntent(ImgPreview.Bitmap, FinishUpload);
 end;
 
 procedure TFrmMain.BtnRotation1Click(Sender: TObject);
 var
-  lBmp: TBitmap;
+  LBmp: TBitmap;
+
+  procedure RotateImage;
+  begin
+    if Image1.RotationAngle = 360 then
+      TAnimator.AnimateFloat(Image1, 'RotationAngle', 0)
+    else
+      TAnimator.AnimateFloat(Image1, 'RotationAngle',
+        Image1.RotationAngle + 90);
+  end;
 
 begin
+  RotateImage;
 
- if Image1.RotationAngle = 360 then
- Begin
- Image1.RotationAngle:=0;
- TAnimator.AnimateFloat(Image1,'RotationAngle',0);
- End
- Else
- Begin
- TAnimator.AnimateFloat(Image1,'RotationAngle',Image1.RotationAngle+90);
- End;
-
-  if not assigned(ImgPreview.Bitmap) then
+  if not Assigned(ImgPreview.Bitmap) then
     Exit;
+
   ImgPreview.Bitmap.Rotate(90);
-  lBmp := TBitmap.Create;
-  lBmp.Width := ImgPreview.Bitmap.Width;
-  lBmp.Height := ImgPreview.Bitmap.Height;
-  lBmp.CopyFromBitmap(ImgPreview.Bitmap);
-  ImgPreview.Bitmap := lBmp;
 end;
 
 procedure TFrmMain.BtnToggleClick(Sender: TObject);
 begin
-
   if TImage(Sender).Tag = 0 then
-  Begin
-   CameraComponent.Kind := TCameraKind.FrontCamera;
-   TImage(Sender).Tag   :=1;
-   exit;
-  End;
+  begin
+    CameraComponent.Kind := TCameraKind.FrontCamera;
+    TImage(Sender).Tag := 1;
+    Exit;
+  end;
 
-   if TImage(Sender).Tag = 1 then
-  Begin
-   CameraComponent.Kind := TCameraKind.BackCamera;
-   TImage(Sender).Tag   :=0;
-   exit;
-  End;
-
+  if TImage(Sender).Tag = 1 then
+  begin
+    CameraComponent.Kind := TCameraKind.BackCamera;
+    TImage(Sender).Tag := 0;
+    Exit;
+  end;
 end;
-
 
 end.
