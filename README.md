@@ -3,7 +3,7 @@
 - Captura foto 
 - Carrega da galeria 
 - Corta imagem
-- 
+ 
 Testado no android 12
 Compilado no Delphi 11.2 Alexandria
 
